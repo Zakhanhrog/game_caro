@@ -1,0 +1,290 @@
+/* --- Biến màu sắc và Font --- */
+:root {
+    --primary-color: #007bff; /* Xanh dương chính */
+    --secondary-color: #6c757d; /* Xám phụ */
+    --success-color: #28a745; /* Xanh lá (thắng) */
+    --warning-color: #ffc107; /* Vàng (highlight) */
+    --light-color: #f8f9fa; /* Màu nền sáng */
+    --dark-color: #343a40; /* Màu chữ tối */
+    --background-color: #e9ecef; /* Màu nền trang */
+
+    --player-x-color: #ff4757; /* Màu đỏ cam cho X */
+    --player-o-color: #1e90ff; /* Màu xanh dương sáng cho O */
+
+    --font-family: 'Poppins', sans-serif;
+    --border-radius: 8px;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --grid-gap: 3px; /* Khoảng cách giữa các ô */
+}
+
+/* --- Reset & Cơ bản --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--dark-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px; /* Giới hạn chiều rộng tối đa */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px; /* Khoảng cách giữa các phần tử chính */
+}
+
+h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* --- Style Thẻ Card --- */
+.card {
+    background-color: var(--light-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    width: 100%;
+}
+
+/* --- Style Nút Bấm --- */
+.btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: var(--font-family);
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    margin: 5px;
+    display: inline-block; /* Để margin hoạt động đúng */
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px); /* Hiệu ứng nhấc lên */
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.size-btn { /* Nút chọn nhanh kích thước */
+    background-color: #ffffff;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+.size-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* --- Cài đặt --- */
+.settings h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--dark-color);
+}
+
+.setting-options {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+    justify-content: space-around;
+    align-items: center;
+    gap: 15px;
+}
+
+.size-option, .preset-sizes {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Cho phép nút xuống dòng */
+    justify-content: center; /* Căn giữa các nút */
+    gap: 5px;
+}
+
+.settings label {
+    margin-right: 8px;
+    font-weight: 600;
+}
+
+.settings input[type="number"] {
+    padding: 8px 12px;
+    width: 70px;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    margin-right: 5px;
+}
+
+.preset-sizes p {
+    margin-right: 10px;
+    font-weight: 600;
+    white-space: nowrap; /* Không xuống dòng chữ "Hoặc chọn nhanh:" */
+}
+
+
+/* --- Khu vực Game --- */
+.game-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Khoảng cách giữa thông tin, bảng cờ, nút reset */
+}
+
+.game-info {
+    text-align: center;
+    padding: 15px; /* Tăng padding */
+}
+
+#status {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--dark-color);
+    min-height: 1.5em; /* Giữ chiều cao ổn định */
+}
+
+/* --- Bảng Cờ --- */
+.game-board-container {
+    padding: 15px; /* Padding bao quanh bảng */
+    width: 100%;
+    max-width: 600px; /* Tăng max-width nếu cần */
+    display: flex; /* Giúp căn giữa bảng nếu cần */
+    justify-content: center;
+}
+
+#game-board {
+    display: grid;
+    /* grid-template-columns sẽ được đặt bởi JS */
+    gap: var(--grid-gap); /* Khoảng cách giữa các ô */
+    border-radius: var(--border-radius); /* Bo góc nhẹ cho cả grid */
+    overflow: hidden; /* Đảm bảo cell không tràn ra ngoài khi có border-radius */
+    width: 100%; /* Chiếm hết container */
+    aspect-ratio: 1 / 1; /* Luôn giữ hình vuông */
+    background-color: #adb5bd; /* Màu nền cho khoảng cách giữa các ô */
+}
+
+.cell {
+    background-color: #ffffff;
+    /* width/height được xác định bởi grid */
+    display: flex; /* !! Quan trọng: Căn giữa nội dung */
+    justify-content: center; /* Căn giữa ngang */
+    align-items: center; /* Căn giữa dọc */
+    font-size: 2rem; /* Kích thước chữ ban đầu */
+    font-weight: 700; /* Đậm hơn */
+    cursor: pointer;
+    /* border: none; Không cần border nữa vì có gap */
+    transition: background-color 0.2s ease;
+    user-select: none; /* Chặn chọn text */
+    line-height: 1; /* !! Quan trọng: Giúp ổn định chiều cao text */
+    border-radius: 4px; /* Bo góc nhẹ cho từng ô */
+}
+
+.cell:hover {
+    background-color: #e9ecef; /* Sáng hơn một chút khi hover */
+}
+
+/* Kiểu cho X và O */
+.cell.x {
+    color: var(--player-x-color);
+    /* text-shadow: 0 0 3px var(--player-x-color); Hiệu ứng glow nhẹ */
+}
+
+.cell.o {
+    color: var(--player-o-color);
+    /* text-shadow: 0 0 3px var(--player-o-color); */
+}
+
+/* Đánh dấu ô thắng */
+.cell.winning {
+    background-color: var(--warning-color);
+    color: var(--dark-color); /* Đổi màu chữ trên nền vàng */
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .container {
+        gap: 20px;
+    }
+    .setting-options {
+        flex-direction: column; /* Xếp chồng cài đặt trên màn hình nhỏ */
+        align-items: stretch; /* Kéo dài các phần tử con */
+        gap: 20px;
+    }
+    .size-option, .preset-sizes {
+        justify-content: center; /* Căn giữa các mục */
+    }
+    .preset-sizes p {
+        margin-bottom: 5px; /* Thêm khoảng cách khi xuống dòng */
+        width: 100%; /* Chiếm hết chiều rộng */
+        text-align: center;
+        margin-right: 0;
+    }
+    .btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    #status {
+        font-size: 1.1em;
+    }
+    .card {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    .settings input[type="number"] {
+        padding: 6px 10px;
+        width: 60px;
+    }
+    :root {
+        --grid-gap: 2px; /* Giảm khoảng cách ô trên màn hình rất nhỏ */
+    }
+    .cell {
+        font-size: 1.5rem; /* Giảm font chữ trong ô cho màn hình nhỏ */
+        border-radius: 3px;
+    }
+}
+
+
+/* --- Điều chỉnh Font Size Ô theo Kích thước Bảng (JS sẽ thêm class này) --- */
+#game-board.size-tiny .cell { font-size: 2.5rem; } /* 3x3, 4x4 */
+#game-board.size-small .cell { font-size: 2rem; }   /* 5x5 -> 8x8 */
+#game-board.size-medium .cell { font-size: 1.5rem; } /* 9x9 -> 14x14 */
+#game-board.size-large .cell { font-size: 1.2rem; }  /* 15x15+ */
