@@ -1,290 +1,424 @@
-/* --- Biến màu sắc và Font --- */
+/* --- Biến và Reset --- */
 :root {
-    --primary-color: #007bff; /* Xanh dương chính */
-    --secondary-color: #6c757d; /* Xám phụ */
-    --success-color: #28a745; /* Xanh lá (thắng) */
-    --warning-color: #ffc107; /* Vàng (highlight) */
-    --light-color: #f8f9fa; /* Màu nền sáng */
-    --dark-color: #343a40; /* Màu chữ tối */
-    --background-color: #e9ecef; /* Màu nền trang */
-
-    --player-x-color: #ff4757; /* Màu đỏ cam cho X */
-    --player-o-color: #1e90ff; /* Màu xanh dương sáng cho O */
-
-    --font-family: 'Poppins', sans-serif;
-    --border-radius: 8px;
-    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    --grid-gap: 3px; /* Khoảng cách giữa các ô */
+    --primary-color: #6a11cb; /* Tím Gradient */
+    --primary-color-dark: #2575fc; /* Xanh Gradient */
+    --secondary-color: #f8f9fa; /* Trắng xám */
+    --accent-color: #ff6b6b; /* Hồng đỏ (cho X) */
+    --accent-color-alt: #4ecdc4; /* Xanh ngọc (cho O) */
+    --text-dark: #333;
+    --text-light: #fff;
+    --background-light: #ffffff;
+    --background-grey: #f1f3f5;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --grid-gap: 2px; /* Giảm gap cho mobile */
+    --font-family: 'Nunito', sans-serif;
+    --border-radius: 12px; /* Bo góc nhiều hơn */
 }
 
-/* --- Reset & Cơ bản --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px; /* Cơ sở cho rem */
+}
+
 body {
     font-family: var(--font-family);
-    background-color: var(--background-color);
-    color: var(--dark-color);
-    display: flex;
+    background: linear-gradient(135deg, var(--primary-color-dark), var(--primary-color)); /* Gradient nền */
+    color: var(--text-dark);
+    overflow: hidden; /* Ngăn scroll không cần thiết */
+    height: 100vh; /* Quan trọng cho layout */
+    display: flex; /* Giúp căn giữa màn hình ban đầu */
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px;
 }
 
-.container {
+/* --- Layout Màn hình và Chuyển đổi --- */
+.screen {
     width: 100%;
-    max-width: 900px; /* Giới hạn chiều rộng tối đa */
+    height: 100%;
+    position: absolute; /* Để chồng lên nhau */
+    top: 0;
+    left: 0;
+    opacity: 0; /* Ẩn ban đầu */
+    visibility: hidden; /* Ẩn hoàn toàn */
+    transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 25px; /* Khoảng cách giữa các phần tử chính */
+    background-color: var(--background-grey); /* Nền mặc định cho các màn hình */
 }
 
-h1 {
-    color: var(--primary-color);
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease-in-out;
+    z-index: 1; /* Đảm bảo màn hình active ở trên */
+}
+
+.content-wrapper { /* Cho màn hình start */
+    padding: 30px 20px;
     text-align: center;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Căn giữa dọc */
+    align-items: center; /* Căn giữa ngang */
+    flex-grow: 1; /* Chiếm không gian còn lại */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
 }
 
-/* --- Style Thẻ Card --- */
+/* --- Thẻ Card --- */
 .card {
-    background-color: var(--light-color);
+    background-color: var(--background-light);
     padding: 20px;
     border-radius: var(--border-radius);
-    box-shadow: var(--card-shadow);
+    box-shadow: var(--shadow);
     width: 100%;
+    max-width: 400px; /* Giới hạn chiều rộng card */
+    margin-bottom: 20px;
 }
 
-/* --- Style Nút Bấm --- */
+/* --- Tiêu đề và Text --- */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-light); /* Màu trắng trên nền gradient */
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+h2 {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+p {
+    line-height: 1.6;
+    color: #555;
+}
+
+footer p {
+    font-size: 0.8rem;
+    color: #aaa; /* Màu xám nhạt hơn */
+    margin-top: 20px;
+}
+
+/* --- Nút Bấm --- */
 .btn {
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 1rem;
     font-family: var(--font-family);
     font-weight: 600;
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
     text-align: center;
-    margin: 5px;
-    display: inline-block; /* Để margin hoạt động đúng */
+    display: block; /* Chiếm toàn bộ chiều rộng mặc định */
+    width: 100%;
+    margin: 8px 0; /* Khoảng cách giữa các nút dọc */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.btn:active { /* Hiệu ứng khi nhấn giữ trên mobile */
+    transform: scale(0.98);
+    box-shadow: none;
 }
 
 .btn-primary {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--text-light);
 }
-.btn-primary:hover {
-    background-color: #0056b3;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px); /* Hiệu ứng nhấc lên */
+.btn-primary:hover { /* Hover cho desktop */
+    background-color: var(--primary-color-dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .btn-secondary {
     background-color: var(--secondary-color);
-    color: white;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
 }
 .btn-secondary:hover {
-    background-color: #5a6268;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
+    background-color: #e9ecef;
 }
 
-.size-btn { /* Nút chọn nhanh kích thước */
-    background-color: #ffffff;
+.btn-warning {
+    background-color: #ffc107;
+    color: var(--text-dark);
+}
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-small { /* Nút nhỏ hơn cho header */
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    width: auto; /* Không chiếm toàn bộ chiều rộng */
+    display: inline-block;
+}
+
+/* --- Màn hình Bắt đầu --- */
+#start-screen h1 {
+    margin-top: 30px; /* Đẩy H1 lên chút */
+}
+
+.preset-sizes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Grid linh hoạt cho các nút */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.preset-sizes .btn { /* Nút preset không cần margin dọc */
+    margin: 0;
+    background-color: var(--background-light);
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
 }
-.size-btn:hover {
+.preset-sizes .btn:hover {
     background-color: var(--primary-color);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: var(--text-light);
 }
 
 
-/* --- Cài đặt --- */
-.settings h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--dark-color);
-}
-
-.setting-options {
-    display: flex;
-    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
-    justify-content: space-around;
-    align-items: center;
-    gap: 15px;
-}
-
-.size-option, .preset-sizes {
+.custom-size {
     display: flex;
     align-items: center;
-    flex-wrap: wrap; /* Cho phép nút xuống dòng */
-    justify-content: center; /* Căn giữa các nút */
-    gap: 5px;
+    justify-content: space-between; /* Dàn đều */
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap; /* Xuống dòng nếu không đủ chỗ */
 }
-
-.settings label {
-    margin-right: 8px;
+.custom-size label {
     font-weight: 600;
+    white-space: nowrap;
 }
-
-.settings input[type="number"] {
-    padding: 8px 12px;
+.custom-size input[type="number"] {
+    padding: 10px;
     width: 70px;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     font-size: 1rem;
-    margin-right: 5px;
-}
-
-.preset-sizes p {
-    margin-right: 10px;
-    font-weight: 600;
-    white-space: nowrap; /* Không xuống dòng chữ "Hoặc chọn nhanh:" */
-}
-
-
-/* --- Khu vực Game --- */
-.game-area {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px; /* Khoảng cách giữa thông tin, bảng cờ, nút reset */
-}
-
-.game-info {
     text-align: center;
-    padding: 15px; /* Tăng padding */
+    flex-grow: 1; /* Cho input giãn ra */
+    min-width: 60px;
+}
+.custom-size .btn {
+    width: auto; /* Nút bắt đầu không full width */
+    flex-grow: 1; /* Cho nút giãn ra */
 }
 
-#status {
-    font-size: 1.3em;
+/* --- Màn hình Chơi Game --- */
+#game-screen {
+    justify-content: space-between; /* Đẩy header/footer ra biên */
+}
+
+.game-header {
+    padding: 15px 20px;
+    background-color: var(--background-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    z-index: 10; /* Header luôn ở trên */
+}
+
+.status-bar {
+    font-size: 1.1rem;
     font-weight: 600;
-    color: var(--dark-color);
-    min-height: 1.5em; /* Giữ chiều cao ổn định */
+    color: var(--text-dark);
 }
 
-/* --- Bảng Cờ --- */
-.game-board-container {
-    padding: 15px; /* Padding bao quanh bảng */
-    width: 100%;
-    max-width: 600px; /* Tăng max-width nếu cần */
-    display: flex; /* Giúp căn giữa bảng nếu cần */
+.game-board-area {
+    flex-grow: 1; /* Chiếm phần lớn không gian */
+    display: flex;
     justify-content: center;
+    align-items: center;
+    padding: 20px; /* Padding xung quanh bảng */
+    overflow: hidden; /* Không cho bảng tràn ra */
 }
 
 #game-board {
     display: grid;
-    /* grid-template-columns sẽ được đặt bởi JS */
-    gap: var(--grid-gap); /* Khoảng cách giữa các ô */
-    border-radius: var(--border-radius); /* Bo góc nhẹ cho cả grid */
-    overflow: hidden; /* Đảm bảo cell không tràn ra ngoài khi có border-radius */
-    width: 100%; /* Chiếm hết container */
-    aspect-ratio: 1 / 1; /* Luôn giữ hình vuông */
-    background-color: #adb5bd; /* Màu nền cho khoảng cách giữa các ô */
+    gap: var(--grid-gap);
+    width: 100%; /* Chiếm toàn bộ vùng padding */
+    max-width: 500px; /* Giới hạn kích thước tối đa */
+    aspect-ratio: 1 / 1;
+    background-color: #bdc3c7; /* Màu nền cho gap */
+    border-radius: 8px; /* Bo góc nhẹ cho grid */
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Đổ bóng vào trong */
 }
 
 .cell {
-    background-color: #ffffff;
-    /* width/height được xác định bởi grid */
-    display: flex; /* !! Quan trọng: Căn giữa nội dung */
-    justify-content: center; /* Căn giữa ngang */
-    align-items: center; /* Căn giữa dọc */
-    font-size: 2rem; /* Kích thước chữ ban đầu */
-    font-weight: 700; /* Đậm hơn */
+    background-color: var(--background-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem; /* Kích thước chữ cho mobile */
+    font-weight: 700;
     cursor: pointer;
-    /* border: none; Không cần border nữa vì có gap */
+    user-select: none;
+    line-height: 1;
+    border-radius: 4px;
     transition: background-color 0.2s ease;
-    user-select: none; /* Chặn chọn text */
-    line-height: 1; /* !! Quan trọng: Giúp ổn định chiều cao text */
-    border-radius: 4px; /* Bo góc nhẹ cho từng ô */
+    color: transparent; /* Ẩn text ban đầu để tránh nhảy layout */
+    position: relative; /* Cho hiệu ứng scale */
+}
+.cell::before { /* Pseudo element để giữ kích thước */
+    content: '';
+    display: block;
+    padding-top: 100%; /* Giữ tỉ lệ vuông cho nội dung bên trong */
+}
+.cell.x, .cell.o {
+    /* Animation khi xuất hiện */
+    animation: pop 0.3s ease-out forwards;
+}
+.cell.x { color: var(--accent-color); }
+.cell.o { color: var(--accent-color-alt); }
+
+/* Animation */
+@keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.cell:hover {
-    background-color: #e9ecef; /* Sáng hơn một chút khi hover */
+
+.cell:hover { /* Hover cho desktop */
+    background-color: var(--background-grey);
 }
 
-/* Kiểu cho X và O */
-.cell.x {
-    color: var(--player-x-color);
-    /* text-shadow: 0 0 3px var(--player-x-color); Hiệu ứng glow nhẹ */
-}
-
-.cell.o {
-    color: var(--player-o-color);
-    /* text-shadow: 0 0 3px var(--player-o-color); */
-}
-
-/* Đánh dấu ô thắng */
 .cell.winning {
-    background-color: var(--warning-color);
-    color: var(--dark-color); /* Đổi màu chữ trên nền vàng */
+    background-color: #fffbe6; /* Vàng nhạt hơn */
+    animation: pulse 1s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
-/* --- Responsive --- */
-@media (max-width: 768px) {
-    .container {
-        gap: 20px;
-    }
-    .setting-options {
-        flex-direction: column; /* Xếp chồng cài đặt trên màn hình nhỏ */
-        align-items: stretch; /* Kéo dài các phần tử con */
-        gap: 20px;
-    }
-    .size-option, .preset-sizes {
-        justify-content: center; /* Căn giữa các mục */
-    }
-    .preset-sizes p {
-        margin-bottom: 5px; /* Thêm khoảng cách khi xuống dòng */
-        width: 100%; /* Chiếm hết chiều rộng */
-        text-align: center;
-        margin-right: 0;
-    }
-    .btn {
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-    #status {
-        font-size: 1.1em;
-    }
-    .card {
-        padding: 15px;
-    }
+.game-footer {
+    padding: 15px 20px;
+    background-color: var(--background-light);
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    text-align: center;
+    z-index: 10;
+}
+#reset-board-btn {
+    background-color: var(--accent-color-alt);
+    color: var(--text-light);
 }
 
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.8em;
+/* --- Modal Kết quả --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+    z-index: 100; /* Luôn ở trên cùng */
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    text-align: center;
+    padding: 30px; /* Tăng padding modal */
+    transform: scale(0.8); /* Hiệu ứng xuất hiện */
+    transition: transform 0.3s ease;
+    width: 90%; /* Chiếm phần lớn màn hình mobile */
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+#result-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+#result-message {
+    font-size: 1.1rem;
+    color: #444;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column; /* Nút xếp dọc trên mobile */
+    gap: 10px;
+}
+
+
+/* --- Điều chỉnh Font Size Ô theo Kích thước Bảng --- */
+/* Giảm font size khi bảng lớn hơn */
+#game-board.size-medium .cell { font-size: 1.4rem; } /* ví dụ 8x8 -> 12x12 */
+#game-board.size-large .cell { font-size: 1.1rem; }  /* ví dụ 13x13+ */
+
+/* --- Responsive cho màn hình lớn hơn (Tablet/Desktop) --- */
+@media (min-width: 600px) {
+    html {
+        font-size: 17px; /* Tăng font cơ sở */
     }
     .btn {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+        display: inline-block; /* Nút không full width */
+        width: auto;
+        padding: 12px 25px; /* Padding lớn hơn */
+        margin: 5px; /* Margin xung quanh nút */
     }
-    .settings input[type="number"] {
-        padding: 6px 10px;
-        width: 60px;
+    .custom-size {
+        flex-wrap: nowrap; /* Không cần xuống dòng */
     }
-    :root {
-        --grid-gap: 2px; /* Giảm khoảng cách ô trên màn hình rất nhỏ */
+    .custom-size .btn {
+        width: auto;
+    }
+    .game-board-area {
+        padding: 30px; /* Tăng padding bảng */
+    }
+    #game-board {
+        max-width: 600px; /* Cho phép bảng lớn hơn */
+        gap: 3px; /* Tăng gap */
     }
     .cell {
-        font-size: 1.5rem; /* Giảm font chữ trong ô cho màn hình nhỏ */
-        border-radius: 3px;
+        font-size: 2.5rem; /* Tăng font mặc định cho desktop */
+        border-radius: 6px;
+    }
+    #game-board.size-medium .cell { font-size: 2rem; }
+    #game-board.size-large .cell { font-size: 1.5rem; }
+
+    .modal-content {
+        width: auto; /* Để modal co giãn theo nội dung */
+        min-width: 350px;
+        max-width: 500px;
+    }
+    .modal-actions {
+        flex-direction: row; /* Nút xếp ngang */
+        justify-content: center;
     }
 }
 
-
-/* --- Điều chỉnh Font Size Ô theo Kích thước Bảng (JS sẽ thêm class này) --- */
-#game-board.size-tiny .cell { font-size: 2.5rem; } /* 3x3, 4x4 */
-#game-board.size-small .cell { font-size: 2rem; }   /* 5x5 -> 8x8 */
-#game-board.size-medium .cell { font-size: 1.5rem; } /* 9x9 -> 14x14 */
-#game-board.size-large .cell { font-size: 1.2rem; }  /* 15x15+ */
+@media (min-width: 992px) {
+    #game-board {
+        max-width: 700px;
+    }
+}

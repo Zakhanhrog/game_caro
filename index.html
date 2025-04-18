@@ -2,49 +2,68 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cờ Caro - Giao diện mới</title>
-    <!-- Google Font -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cờ Caro Mobile</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Link CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <!-- Thêm biểu tượng (ví dụ Font Awesome) nếu muốn -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
 <body>
-<div class="container">
-    <h1>✨ Cờ Caro Pro ✨</h1>
 
-    <div class="settings card">
-        <h2>Cài đặt ván đấu</h2>
-        <div class="setting-options">
-            <div class="size-option">
-                <label for="board-size">Kích thước (3-20):</label>
-                <input type="number" id="board-size" min="3" max="20" value="10">
-                <button id="start-custom-size" class="btn btn-primary">Bắt đầu</button>
-            </div>
+<!-- Màn hình Bắt đầu (Mặc định hiển thị) -->
+<div id="start-screen" class="screen active">
+    <div class="content-wrapper">
+        <h1>🚀 Caro Champ 🚀</h1>
+        <div class="card settings">
+            <h2>Chọn kích thước bàn cờ</h2>
             <div class="preset-sizes">
-                <p>Hoặc chọn nhanh:</p>
                 <button class="btn size-btn" data-size="3">3x3</button>
                 <button class="btn size-btn" data-size="5">5x5</button>
+                <button class="btn size-btn" data-size="7">7x7</button>
                 <button class="btn size-btn" data-size="10">10x10</button>
                 <button class="btn size-btn" data-size="15">15x15</button>
             </div>
-        </div>
-    </div>
-
-    <div class="game-area">
-        <div class="game-info card">
-            <p id="status">Bắt đầu chọn kích thước!</p>
-        </div>
-
-        <div class="game-board-container card">
-            <div id="game-board">
-                <!-- Các ô cờ sẽ được tạo bởi JavaScript -->
+            <div class="custom-size">
+                <label for="board-size-start">Hoặc nhập (3-20):</label>
+                <input type="number" id="board-size-start" min="3" max="20" value="10">
+                <button id="start-custom-btn" class="btn btn-primary">Bắt đầu</button>
             </div>
         </div>
+        <footer>
+            <p>Sản phầm được phát triển bới dev.zakhanh</p>
+        </footer>
+    </div>
+</div>
 
-        <button id="reset-button" class="btn btn-secondary">Chơi lại</button>
+<!-- Màn hình Chơi Game (Mặc định ẩn) -->
+<div id="game-screen" class="screen">
+    <div class="game-header">
+        <div id="game-status" class="status-bar">Lượt của X</div>
+        <button id="new-game-btn" class="btn btn-secondary btn-small">Ván mới</button>
+    </div>
+    <div class="game-board-area">
+        <div id="game-board">
+            <!-- Các ô cờ sẽ được tạo bởi JavaScript -->
+        </div>
+    </div>
+    <div class="game-footer">
+        <button id="reset-board-btn" class="btn btn-warning">Chơi lại</button>
+        <!-- Có thể thêm nút cài đặt ở đây -->
+    </div>
+</div>
+
+<!-- Modal Kết quả (Mặc định ẩn) -->
+<div id="result-modal" class="modal-overlay">
+    <div class="modal-content card">
+        <h2 id="result-title">Kết quả</h2>
+        <p id="result-message">Người chơi X thắng!</p>
+        <div class="modal-actions">
+            <button id="play-again-btn" class="btn btn-primary">Chơi lại</button>
+            <button id="new-game-modal-btn" class="btn btn-secondary">Ván mới</button>
+        </div>
     </div>
 </div>
 
