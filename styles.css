@@ -1,424 +1,607 @@
-/* --- Biến và Reset --- */
+/* ==========================================================================
+   CSS Variables & Base Styles
+   ========================================================================== */
+
 :root {
-    --primary-color: #6a11cb; /* Tím Gradient */
-    --primary-color-dark: #2575fc; /* Xanh Gradient */
-    --secondary-color: #f8f9fa; /* Trắng xám */
-    --accent-color: #ff6b6b; /* Hồng đỏ (cho X) */
-    --accent-color-alt: #4ecdc4; /* Xanh ngọc (cho O) */
-    --text-dark: #333;
-    --text-light: #fff;
-    --background-light: #ffffff;
-    --background-grey: #f1f3f5;
-    --border-color: #dee2e6;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    --grid-gap: 2px; /* Giảm gap cho mobile */
-    --font-family: 'Nunito', sans-serif;
-    --border-radius: 12px; /* Bo góc nhiều hơn */
+    --font-primary: 'DM Sans', sans-serif;
+
+    /* Light Theme Colors */
+    --bg-main-light: #f6f8fa;
+    --bg-card-light: #ffffff;
+    --text-primary-light: #1a1a1a;
+    --text-secondary-light: #6a737d;
+    --border-color-light: #d1d5da;
+    --accent-color-light: #0052ff;
+    --accent-hover-light: #0041cc;
+    --warning-color-light: #f9a825;
+    --warning-hover-light: #f59f00;
+    --player-x-light: #d73a49;
+    --player-o-light: #22863a;
+    --last-move-bg-light: #e3f2fd;
+    --grid-gap-bg-light: #e1e4e8; /* Màu cho khoảng cách grid */
+
+    /* Dark Theme Colors */
+    --bg-main-dark: #0d1117;
+    --bg-card-dark: #161b22;
+    --text-primary-dark: #c9d1d9;
+    --text-secondary-dark: #8b949e;
+    --border-color-dark: #30363d;
+    --accent-color-dark: #1f6feb;
+    --accent-hover-dark: #388bfd;
+    --warning-color-dark: #f4bd6a;
+    --warning-hover-dark: #e0a800;
+    --player-x-dark: #f85149;
+    --player-o-dark: #58a6ff;
+    --last-move-bg-dark: #1f6feb1a; /* Màu xanh trong suốt nhẹ */
+    --grid-gap-bg-dark: #21262d; /* Màu cho khoảng cách grid tối */
+
+    /* Default to Light Theme Variables */
+    --bg-main: var(--bg-main-light);
+    --bg-card: var(--bg-card-light);
+    --text-primary: var(--text-primary-light);
+    --text-secondary: var(--text-secondary-light);
+    --border-color: var(--border-color-light);
+    --accent-color: var(--accent-color-light);
+    --accent-hover: var(--accent-hover-light);
+    --warning-color: var(--warning-color-light);
+    --warning-hover: var(--warning-hover-light);
+    --player-x: var(--player-x-light);
+    --player-o: var(--player-o-light);
+    --last-move-bg: var(--last-move-bg-light);
+    --grid-gap-bg: var(--grid-gap-bg-light);
+
+    /* Layout & Style Constants */
+    --border-radius: 6px; /* Hơi bo tròn */
+    --spacing-unit: 8px;
+    --transition-fast: 0.2s ease-out;
+    --grid-gap: 2px;
+    --input-height: 44px;
 }
 
+/* Apply Dark Theme Variables when body has .dark-theme class */
+body.dark-theme {
+    --bg-main: var(--bg-main-dark);
+    --bg-card: var(--bg-card-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --border-color: var(--border-color-dark);
+    --accent-color: var(--accent-color-dark);
+    --accent-hover: var(--accent-hover-dark);
+    --warning-color: var(--warning-color-dark);
+    --warning-hover: var(--warning-hover-dark);
+    --player-x: var(--player-x-dark);
+    --player-o: var(--player-o-dark);
+    --last-move-bg: var(--last-move-bg-dark);
+    --grid-gap-bg: var(--grid-gap-bg-dark);
+}
+
+/* --- Base & Reset --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 html {
-    font-size: 16px; /* Cơ sở cho rem */
+    font-size: 16px;
 }
-
 body {
-    font-family: var(--font-family);
-    background: linear-gradient(135deg, var(--primary-color-dark), var(--primary-color)); /* Gradient nền */
-    color: var(--text-dark);
-    overflow: hidden; /* Ngăn scroll không cần thiết */
-    height: 100vh; /* Quan trọng cho layout */
-    display: flex; /* Giúp căn giữa màn hình ban đầu */
-    justify-content: center;
-    align-items: center;
+    font-family: var(--font-primary);
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow: hidden; /* Prevent body scroll */
+    height: 100vh;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Layout Màn hình và Chuyển đổi --- */
+/* ==========================================================================
+   Screen Transitions & Layout
+   ========================================================================== */
+
 .screen {
     width: 100%;
     height: 100%;
-    position: absolute; /* Để chồng lên nhau */
+    position: absolute;
     top: 0;
     left: 0;
-    opacity: 0; /* Ẩn ban đầu */
-    visibility: hidden; /* Ẩn hoàn toàn */
-    transition: opacity 0.4s ease-in-out, visibility 0s linear 0.4s;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px); /* Subtle slide up */
+    transition: opacity var(--transition-fast), transform var(--transition-fast), visibility 0s linear var(--transition-fast);
     display: flex;
     flex-direction: column;
-    background-color: var(--background-grey); /* Nền mặc định cho các màn hình */
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 3);
+    overflow-y: auto; /* Allow scrolling within screen if content overflows */
 }
-
 .screen.active {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.4s ease-in-out;
-    z-index: 1; /* Đảm bảo màn hình active ở trên */
+    transform: translateY(0);
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    z-index: 1;
 }
 
-.content-wrapper { /* Cho màn hình start */
-    padding: 30px 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Căn giữa dọc */
-    align-items: center; /* Căn giữa ngang */
-    flex-grow: 1; /* Chiếm không gian còn lại */
-    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
-}
+/* ==========================================================================
+   Typography
+   ========================================================================== */
 
-/* --- Thẻ Card --- */
-.card {
-    background-color: var(--background-light);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    width: 100%;
-    max-width: 400px; /* Giới hạn chiều rộng card */
-    margin-bottom: 20px;
-}
-
-/* --- Tiêu đề và Text --- */
 h1 {
-    font-size: 2.2rem;
+    font-size: 3rem;
     font-weight: 700;
-    color: var(--text-light); /* Màu trắng trên nền gradient */
-    margin-bottom: 25px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-h2 {
-    font-size: 1.4rem;
-    color: var(--primary-color);
-    margin-bottom: 15px;
+    letter-spacing: 0.1em;
     text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    color: var(--text-primary);
 }
-
-p {
-    line-height: 1.6;
-    color: #555;
-}
-
-footer p {
-    font-size: 0.8rem;
-    color: #aaa; /* Màu xám nhạt hơn */
-    margin-top: 20px;
-}
-
-/* --- Nút Bấm --- */
-.btn {
-    padding: 12px 20px;
+h2 { /* Section titles within cards/areas */
     font-size: 1rem;
-    font-family: var(--font-family);
     font-weight: 600;
-    border: none;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color); /* Underline effect */
+    padding-bottom: calc(var(--spacing-unit) * 0.5);
+    text-align: left; /* Align section titles left */
+}
+
+/* ==========================================================================
+   Buttons & Inputs
+   ========================================================================== */
+
+.btn {
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0 calc(var(--spacing-unit) * 2.5); /* Horizontal padding only */
+    border: 1px solid transparent;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: all 0.25s ease;
     text-align: center;
-    display: block; /* Chiếm toàn bộ chiều rộng mặc định */
-    width: 100%;
-    margin: 8px 0; /* Khoảng cách giữa các nút dọc */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform 0.1s ease-out;
+    display: inline-flex; /* Use flex for alignment */
+    align-items: center;
+    justify-content: center;
+    min-height: var(--input-height); /* Standard height */
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    margin: calc(var(--spacing-unit) * 0.5) 0; /* Default margin */
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
 }
-.btn:active { /* Hiệu ứng khi nhấn giữ trên mobile */
+.btn:hover {
+    border-color: var(--text-secondary);
+}
+.btn:active {
     transform: scale(0.98);
-    box-shadow: none;
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--border-color) !important;
+    background-color: transparent !important;
+    color: var(--text-secondary) !important;
 }
 
+/* Button Variants */
 .btn-primary {
-    background-color: var(--primary-color);
-    color: var(--text-light);
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
 }
-.btn-primary:hover { /* Hover cho desktop */
-    background-color: var(--primary-color-dark);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
 }
 
-.btn-secondary {
-    background-color: var(--secondary-color);
-    color: var(--text-dark);
-    border: 1px solid var(--border-color);
-}
-.btn-secondary:hover {
-    background-color: #e9ecef;
-}
+.btn-secondary { /* Inherits base .btn style */ }
 
 .btn-warning {
-    background-color: #ffc107;
-    color: var(--text-dark);
+    background-color: var(--warning-color);
+    color: var(--text-primary); /* Ensure contrast on yellow */
+    border-color: var(--warning-color);
 }
 .btn-warning:hover {
-    background-color: #e0a800;
+    background-color: var(--warning-hover);
+    border-color: var(--warning-hover);
+}
+.btn-full-width {
+    display: flex; /* Overrides inline-flex */
+    width: 100%;
+}
+.btn-theme-toggle {
+    position: absolute;
+    top: calc(var(--spacing-unit) * 2);
+    right: calc(var(--spacing-unit) * 2);
+    padding: var(--spacing-unit);
+    line-height: 1;
+    min-width: 80px;
+    min-height: auto; /* Override standard height */
+    height: auto;
+    font-size: 0.85rem;
 }
 
-.btn-small { /* Nút nhỏ hơn cho header */
-    padding: 8px 15px;
-    font-size: 0.9rem;
-    width: auto; /* Không chiếm toàn bộ chiều rộng */
-    display: inline-block;
+/* Input Fields */
+input[type="text"],
+input[type="number"] {
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    padding: 0 calc(var(--spacing-unit) * 1.5);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-main); /* Background slightly different from card */
+    color: var(--text-primary);
+    height: var(--input-height);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    width: 100%; /* Default to full width */
+}
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: var(--bg-card);
+}
+input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
 }
 
-/* --- Màn hình Bắt đầu --- */
-#start-screen h1 {
-    margin-top: 30px; /* Đẩy H1 lên chút */
+/* ==========================================================================
+   Setup Screen (#setup-screen)
+   ========================================================================== */
+
+.setup-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* Center vertically */
+}
+
+.settings-card {
+    background-color: var(--bg-card);
+    padding: calc(var(--spacing-unit) * 3);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 3);
+}
+
+.player-setup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-unit);
+}
+
+.player-input {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.5);
+}
+.player-input label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.size-selection {
+    /* No specific styles needed beyond grouping */
 }
 
 .preset-sizes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Grid linh hoạt cho các nút */
-    gap: 10px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); /* Adjust minmax */
+    gap: var(--spacing-unit);
+    margin-bottom: calc(var(--spacing-unit) * 2);
 }
-
-.preset-sizes .btn { /* Nút preset không cần margin dọc */
+.preset-sizes .btn {
+    width: 100%;
     margin: 0;
-    background-color: var(--background-light);
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+    padding: var(--spacing-unit);
+    font-weight: 400;
 }
-.preset-sizes .btn:hover {
-    background-color: var(--primary-color);
-    color: var(--text-light);
-}
-
 
 .custom-size {
     display: flex;
+    gap: var(--spacing-unit);
     align-items: center;
-    justify-content: space-between; /* Dàn đều */
-    gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap; /* Xuống dòng nếu không đủ chỗ */
-}
-.custom-size label {
-    font-weight: 600;
-    white-space: nowrap;
 }
 .custom-size input[type="number"] {
-    padding: 10px;
-    width: 70px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    text-align: center;
-    flex-grow: 1; /* Cho input giãn ra */
-    min-width: 60px;
+    text-align: left;
+    flex-grow: 1;
+    min-width: 80px;
 }
-.custom-size .btn {
-    width: auto; /* Nút bắt đầu không full width */
-    flex-grow: 1; /* Cho nút giãn ra */
+#start-game-btn { /* Specific button spacing */
+    margin-top: var(--spacing-unit);
 }
 
-/* --- Màn hình Chơi Game --- */
+/* ==========================================================================
+   Game Screen (#game-screen)
+   ========================================================================== */
+
 #game-screen {
-    justify-content: space-between; /* Đẩy header/footer ra biên */
+    padding-top: calc(var(--spacing-unit) * 2);
+    padding-bottom: calc(var(--spacing-unit) * 2);
+    justify-content: flex-start; /* Content aligns top */
 }
 
+/* --- Game Header --- */
 .game-header {
-    padding: 15px 20px;
-    background-color: var(--background-light);
+    width: 100%;
+    max-width: 700px;
+    padding: var(--spacing-unit) 0; /* Vertical padding only */
+    margin-bottom: calc(var(--spacing-unit) * 2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    z-index: 10; /* Header luôn ở trên */
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1.5);
+    border-bottom: 1px solid var(--border-color);
 }
-
-.status-bar {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-}
-
-.game-board-area {
-    flex-grow: 1; /* Chiếm phần lớn không gian */
+.scores-display {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 20px; /* Padding xung quanh bảng */
-    overflow: hidden; /* Không cho bảng tràn ra */
+    gap: var(--spacing-unit);
+    flex-grow: 1; /* Take available space */
+    justify-content: center; /* Center scores */
+    text-align: center;
+    flex-basis: 100%; /* Default to full width on small screens */
+    order: 1; /* Default order */
+}
+.scores-display span span { /* Player Name */
+    opacity: 0.8; /* Slightly lighter name */
+}
+.scores-display strong { /* Score */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-left: calc(var(--spacing-unit) * 0.5);
+    font-size: 1.1em;
+    min-width: 1.5ch; /* Ensure space for score */
+    display: inline-block;
+}
+.score-separator {
+    opacity: 0.3;
+}
+.game-controls {
+    display: flex;
+    gap: var(--spacing-unit);
+    flex-wrap: nowrap;
+    justify-content: center; /* Center controls */
+    flex-basis: 100%; /* Default to full width on small screens */
+    order: 0; /* Default order */
+}
+.game-controls .btn {
+    padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.5);
+    font-size: 0.85rem;
+    margin: 0;
+    flex-shrink: 0;
+}
+.game-controls .btn-theme-toggle {
+    position: static; /* Override absolute positioning */
+}
+
+/* --- Game Area --- */
+.game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+#game-status {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    color: var(--text-primary);
+    min-height: 1.5em;
+    transition: color var(--transition-fast);
+    text-align: center;
+}
+
+#game-board-wrapper {
+    width: 100%;
+    padding: var(--spacing-unit);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: calc(var(--spacing-unit) * 3);
+    max-width: 550px; /* Adjust max board size if needed */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #game-board {
     display: grid;
     gap: var(--grid-gap);
-    width: 100%; /* Chiếm toàn bộ vùng padding */
-    max-width: 500px; /* Giới hạn kích thước tối đa */
+    width: 100%;
     aspect-ratio: 1 / 1;
-    background-color: #bdc3c7; /* Màu nền cho gap */
-    border-radius: 8px; /* Bo góc nhẹ cho grid */
+    background-color: var(--grid-gap-bg); /* Use variable for gap background */
+    border-radius: calc(var(--border-radius) - 2px); /* Inner radius slightly smaller */
     overflow: hidden;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Đổ bóng vào trong */
 }
 
+/* --- Cell Styling (FIXED SIZE) --- */
 .cell {
-    background-color: var(--background-light);
-    display: flex;
+    background-color: var(--bg-card);
+    display: flex; /* Use flex to contain span */
     justify-content: center;
     align-items: center;
-    font-size: 1.8rem; /* Kích thước chữ cho mobile */
+    font-size: 2rem; /* Base size, controlled by grid + media queries */
     font-weight: 700;
     cursor: pointer;
     user-select: none;
-    line-height: 1;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-    color: transparent; /* Ẩn text ban đầu để tránh nhảy layout */
-    position: relative; /* Cho hiệu ứng scale */
-}
-.cell::before { /* Pseudo element để giữ kích thước */
-    content: '';
-    display: block;
-    padding-top: 100%; /* Giữ tỉ lệ vuông cho nội dung bên trong */
-}
-.cell.x, .cell.o {
-    /* Animation khi xuất hiện */
-    animation: pop 0.3s ease-out forwards;
-}
-.cell.x { color: var(--accent-color); }
-.cell.o { color: var(--accent-color-alt); }
-
-/* Animation */
-@keyframes pop {
-    0% { transform: scale(0.5); opacity: 0; }
-    70% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
+    border-radius: 2px;
+    transition: background-color var(--transition-fast);
+    position: relative; /* Needed for absolute positioning of span */
+    overflow: hidden; /* Prevent potential span overflow */
 }
 
-
-.cell:hover { /* Hover cho desktop */
-    background-color: var(--background-grey);
-}
-
-.cell.winning {
-    background-color: #fffbe6; /* Vàng nhạt hơn */
-    animation: pulse 1s infinite;
-}
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-.game-footer {
-    padding: 15px 20px;
-    background-color: var(--background-light);
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-    text-align: center;
-    z-index: 10;
-}
-#reset-board-btn {
-    background-color: var(--accent-color-alt);
-    color: var(--text-light);
-}
-
-/* --- Modal Kết quả --- */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+.cell span { /* The X/O character */
+    display: flex; /* Use flex to center content within span */
+    align-items: center;
+    justify-content: center;
+    position: absolute; /* Take span out of layout flow */
+    inset: 0; /* shorthand for top:0, right:0, bottom:0, left:0 */
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    font-size: inherit; /* Inherit size from .cell */
+    line-height: 1; /* Critical for vertical centering and stability */
+    opacity: 0; /* Hidden initially */
+    transform: scale(0.8);
+    transition: transform 0.15s ease-out, opacity 0.15s ease-out, color var(--transition-fast);
+    color: transparent; /* Hide color initially */
+}
+.cell.x span, .cell.o span {
+    opacity: 1;
+    transform: scale(1);
+}
+.cell.x span { color: var(--player-x); }
+.cell.o span { color: var(--player-o); }
+
+/* Cell Highlights */
+.cell.last-move {
+    background-color: var(--last-move-bg);
+}
+.cell.winning {
+    background-color: color-mix(in srgb, var(--warning-color) 15%, var(--bg-card));
+}
+.cell.winning span {
+    font-weight: 700;
+}
+
+/* --- Game Actions Below Board --- */
+.game-actions {
+    width: 100%;
+    text-align: center;
+}
+.game-actions .btn {
+    min-width: 150px;
+}
+
+/* ==========================================================================
+   Modal (#result-modal)
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
-    z-index: 100; /* Luôn ở trên cùng */
+    transition: opacity var(--transition-fast), visibility 0s linear var(--transition-fast);
+    z-index: 1000;
+    padding: var(--spacing-unit);
 }
-
 .modal-overlay.active {
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--transition-fast);
 }
-
 .modal-content {
+    background-color: var(--bg-card);
+    padding: calc(var(--spacing-unit) * 4);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
     text-align: center;
-    padding: 30px; /* Tăng padding modal */
-    transform: scale(0.8); /* Hiệu ứng xuất hiện */
-    transition: transform 0.3s ease;
-    width: 90%; /* Chiếm phần lớn màn hình mobile */
+    width: 100%;
+    max-width: 400px;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
-
 .modal-overlay.active .modal-content {
     transform: scale(1);
+    opacity: 1;
 }
-
 #result-title {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-unit);
+    /* Color set by JS */
 }
-
 #result-message {
-    font-size: 1.1rem;
-    color: #444;
-    margin-bottom: 25px;
-    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: calc(var(--spacing-unit) * 3);
 }
-
 .modal-actions {
     display: flex;
-    flex-direction: column; /* Nút xếp dọc trên mobile */
-    gap: 10px;
+    flex-direction: column-reverse; /* Primary button bottom */
+    gap: var(--spacing-unit);
+}
+.modal-actions .btn {
+    width: 100%;
+    margin: 0;
 }
 
+/* ==========================================================================
+   Font Size Adjustments (Board)
+   ========================================================================== */
 
-/* --- Điều chỉnh Font Size Ô theo Kích thước Bảng --- */
-/* Giảm font size khi bảng lớn hơn */
-#game-board.size-medium .cell { font-size: 1.4rem; } /* ví dụ 8x8 -> 12x12 */
-#game-board.size-large .cell { font-size: 1.1rem; }  /* ví dụ 13x13+ */
+#game-board.size-medium .cell { font-size: 1.6rem; } /* ~8-12 */
+#game-board.size-large .cell { font-size: 1.2rem; }  /* 13+ */
 
-/* --- Responsive cho màn hình lớn hơn (Tablet/Desktop) --- */
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+/* Mobile first - styles above are mobile default */
+
+/* Tablet and larger adjustments */
 @media (min-width: 600px) {
-    html {
-        font-size: 17px; /* Tăng font cơ sở */
-    }
-    .btn {
-        display: inline-block; /* Nút không full width */
-        width: auto;
-        padding: 12px 25px; /* Padding lớn hơn */
-        margin: 5px; /* Margin xung quanh nút */
-    }
-    .custom-size {
-        flex-wrap: nowrap; /* Không cần xuống dòng */
-    }
-    .custom-size .btn {
-        width: auto;
-    }
-    .game-board-area {
-        padding: 30px; /* Tăng padding bảng */
-    }
-    #game-board {
-        max-width: 600px; /* Cho phép bảng lớn hơn */
-        gap: 3px; /* Tăng gap */
-    }
-    .cell {
-        font-size: 2.5rem; /* Tăng font mặc định cho desktop */
-        border-radius: 6px;
-    }
-    #game-board.size-medium .cell { font-size: 2rem; }
-    #game-board.size-large .cell { font-size: 1.5rem; }
+    :root { --spacing-unit: 10px; } /* Increase base spacing */
+    h1 { font-size: 3.5rem; }
+    .btn { font-size: 1rem; }
 
-    .modal-content {
-        width: auto; /* Để modal co giãn theo nội dung */
-        min-width: 350px;
-        max-width: 500px;
+    .setup-container { max-width: 550px; } /* Wider setup */
+    .settings-card { padding: calc(var(--spacing-unit) * 4); }
+    .player-setup { flex-direction: row; gap: calc(var(--spacing-unit) * 2); }
+    .player-input { flex-grow: 1; } /* Equal width name inputs */
+
+    .game-header {
+        flex-wrap: nowrap; /* Prevent header wrapping */
+        padding: var(--spacing-unit) 0;
     }
+    .scores-display {
+        order: 0; /* Scores first */
+        justify-content: flex-start; /* Align scores left */
+        flex-basis: auto; /* Let scores size naturally */
+        margin-top: 0;
+    }
+    .game-controls {
+        order: 1; /* Controls second */
+        justify-content: flex-end; /* Align controls right */
+        flex-basis: auto;
+    }
+
+    #game-board-wrapper { max-width: 550px; }
+    .cell { font-size: 2.5rem; }
+    #game-board.size-medium .cell { font-size: 2rem; }
+    #game-board.size-large .cell { font-size: 1.6rem; }
+
     .modal-actions {
-        flex-direction: row; /* Nút xếp ngang */
+        flex-direction: row; /* Buttons side-by-side */
         justify-content: center;
     }
+    .modal-actions .btn { width: auto; } /* Buttons fit content */
 }
 
+/* Larger desktop adjustments */
 @media (min-width: 992px) {
-    #game-board {
-        max-width: 700px;
-    }
+    #game-board-wrapper { max-width: 650px; }
 }

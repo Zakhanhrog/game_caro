@@ -3,66 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cờ Caro Mobile</title>
+    <title>Caro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <!-- Thêm biểu tượng (ví dụ Font Awesome) nếu muốn -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
 </head>
-<body>
+<body class=""> <!-- Class 'dark-theme' sẽ được thêm/xóa bởi JS -->
 
-<!-- Màn hình Bắt đầu (Mặc định hiển thị) -->
-<div id="start-screen" class="screen active">
-    <div class="content-wrapper">
-        <h1>🚀 Caro Champ 🚀</h1>
-        <div class="card settings">
-            <h2>Chọn kích thước bàn cờ</h2>
-            <div class="preset-sizes">
-                <button class="btn size-btn" data-size="3">3x3</button>
-                <button class="btn size-btn" data-size="5">5x5</button>
-                <button class="btn size-btn" data-size="7">7x7</button>
-                <button class="btn size-btn" data-size="10">10x10</button>
-                <button class="btn size-btn" data-size="15">15x15</button>
+<!-- Màn hình Cài đặt -->
+<div id="setup-screen" class="screen active">
+    <div class="setup-container">
+        <h1>CARO</h1>
+        <div class="settings-card">
+            <!-- Phần Nhập Tên Người Chơi -->
+            <div class="player-setup">
+                <h2>Người Chơi</h2>
+                <div class="player-input">
+                    <label for="player1-name-input">Người Chơi 1 (X)</label>
+                    <input type="text" id="player1-name-input" placeholder="Nhập tên" maxlength="15">
+                </div>
+                <div class="player-input">
+                    <label for="player2-name-input">Người Chơi 2 (O)</label>
+                    <input type="text" id="player2-name-input" placeholder="Nhập tên" maxlength="15">
+                </div>
             </div>
-            <div class="custom-size">
-                <label for="board-size-start">Hoặc nhập (3-20):</label>
-                <input type="number" id="board-size-start" min="3" max="20" value="10">
-                <button id="start-custom-btn" class="btn btn-primary">Bắt đầu</button>
+
+            <!-- Phần Chọn Kích Thước -->
+            <div class="size-selection">
+                <h2>Kích Thước Bàn Cờ</h2>
+                <div class="preset-sizes">
+                    <button class="btn size-btn" data-size="3">3x3</button>
+                    <button class="btn size-btn" data-size="5">5x5</button>
+                    <button class="btn size-btn" data-size="10">10x10</button>
+                    <button class="btn size-btn" data-size="15">15x15</button>
+                </div>
+                <div class="custom-size">
+                    <input type="number" id="board-size-input" min="3" max="20" placeholder="Size (3-20)" value="10">
+                </div>
             </div>
+
+            <button id="start-game-btn" class="btn btn-primary btn-full-width">Bắt Đầu Chơi</button>
         </div>
-        <footer>
-            <p>Sản phầm được phát triển bới dev.zakhanh</p>
-        </footer>
+        <button id="theme-toggle-setup" class="btn btn-theme-toggle">Sáng/Tối</button>
     </div>
 </div>
 
-<!-- Màn hình Chơi Game (Mặc định ẩn) -->
+<!-- Màn hình Chơi Game -->
 <div id="game-screen" class="screen">
+    <!-- Header Game: Chứa Điểm và Nút điều khiển -->
     <div class="game-header">
-        <div id="game-status" class="status-bar">Lượt của X</div>
-        <button id="new-game-btn" class="btn btn-secondary btn-small">Ván mới</button>
-    </div>
-    <div class="game-board-area">
-        <div id="game-board">
-            <!-- Các ô cờ sẽ được tạo bởi JavaScript -->
+        <div class="scores-display">
+            <span id="player1-info"><span id="player1-name-display">Player 1</span>: <strong id="player1-score">0</strong></span>
+            <span class="score-separator">|</span>
+            <span id="player2-info"><span id="player2-name-display">Player 2</span>: <strong id="player2-score">0</strong></span>
+        </div>
+        <div class="game-controls">
+            <button id="undo-btn" class="btn btn-secondary" disabled>Hoàn Tác</button>
+            <button id="new-setup-btn" class="btn btn-secondary">Cài Đặt Mới</button>
+            <button id="theme-toggle-game" class="btn btn-theme-toggle">Sáng/Tối</button>
         </div>
     </div>
-    <div class="game-footer">
-        <button id="reset-board-btn" class="btn btn-warning">Chơi lại</button>
-        <!-- Có thể thêm nút cài đặt ở đây -->
+
+    <!-- Khu vực chính của Game -->
+    <div class="game-area">
+        <div id="game-status">Lượt của: Player 1</div>
+        <div id="game-board-wrapper">
+            <div id="game-board">
+                <!-- Cells -->
+            </div>
+        </div>
+        <div class="game-actions">
+            <button id="reset-game-btn" class="btn btn-warning">Chơi Lại Ván</button>
+        </div>
     </div>
 </div>
 
-<!-- Modal Kết quả (Mặc định ẩn) -->
+<!-- Modal Kết quả -->
 <div id="result-modal" class="modal-overlay">
-    <div class="modal-content card">
-        <h2 id="result-title">Kết quả</h2>
+    <div class="modal-content">
+        <h2 id="result-title">Kết Quả</h2>
         <p id="result-message">Người chơi X thắng!</p>
         <div class="modal-actions">
-            <button id="play-again-btn" class="btn btn-primary">Chơi lại</button>
-            <button id="new-game-modal-btn" class="btn btn-secondary">Ván mới</button>
+            <button id="new-setup-modal-btn" class="btn btn-secondary">Cài Đặt Mới</button>
+            <button id="play-again-modal-btn" class="btn btn-primary">Chơi Lại Ván</button>
         </div>
     </div>
 </div>
